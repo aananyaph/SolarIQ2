@@ -2,7 +2,7 @@ services:
   - type: web
     name: solariq-frontend
     env: node
-    rootDir: frontend
+    dir: ./frontend
     buildCommand: npm install
     startCommand: npm start
     envVars:
