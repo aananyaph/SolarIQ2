@@ -21,10 +21,11 @@
 </head>
 <body class="bg-gradient-to-b from-sky-50 to-indigo-50 min-h-screen">
 <script>
-  // expose current user's avg_power to client JS
+  // expose current user's avg_power and backend URL to client JS
   window.CURRENT_USER = {
     avg_power: <%= JSON.stringify(typeof avg_power !== "undefined" ? avg_power : (user ? user.avg_power : 0)) %>
   };
+  window.BACKEND_URL = <%= JSON.stringify(typeof backendUrl !== "undefined" ? backendUrl : "http://127.0.0.1:5001") %>;
 </script>
 
 <!-- NAVBAR (new) -->
@@ -247,6 +248,7 @@
 <script>
 (async function () {
   const DEFAULT_HORIZON = 3; // months to predict
+  const BACKEND_URL = window.BACKEND_URL || "http://127.0.0.1:5001";
   // remove fixed DEFAULT_ELEC_RATE; use tariffs map and selected tariff instead
   const TARIFFS = { domestic: 5.8, institution: 6.3, industry: 7.5 };
 
@@ -408,8 +410,8 @@
       const nasaEnd = toNASADate(endIso);
 
       const [nasaRes, loadRes] = await Promise.all([
-        fetch(`http://127.0.0.1:5001/nasa_data?start=${nasaStart}&end=${nasaEnd}`),
-        fetch(`http://127.0.0.1:5001/load_history?start=${startIso}&end=${endIso}`)
+        fetch(`${BACKEND_URL}/nasa_data?start=${nasaStart}&end=${nasaEnd}`),
+        fetch(`${BACKEND_URL}/load_history?start=${startIso}&end=${endIso}`)
       ]);
 
       const nasaJson = await nasaRes.json();
@@ -427,7 +429,7 @@
       const startPredStr = startPred.toISOString().split("T")[0];
       const endPredStr = endPred.toISOString().split("T")[0];
 
-      const predictRes = await fetch("http://127.0.0.1:5001/predict", {
+      const predictRes = await fetch(`${BACKEND_URL}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ start_date: startPredStr, end_date: endPredStr })

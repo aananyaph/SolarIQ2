@@ -37,6 +37,7 @@ app.get("/dashboard", async (req, res) => {
     res.render("dashboard", {
       user: dashboardUser,
       avg_power: dashboardUser.avg_power,
+      backendUrl: BACKEND_URL,
       todayData: todayRes.data || null,
       historyData: historyRes.data || [],
       forecastData: [],
@@ -46,6 +47,7 @@ app.get("/dashboard", async (req, res) => {
     res.render("dashboard", {
       user: dashboardUser,
       avg_power: dashboardUser.avg_power,
+      backendUrl: BACKEND_URL,
       todayData: null,
       historyData: [],
       forecastData: [],
