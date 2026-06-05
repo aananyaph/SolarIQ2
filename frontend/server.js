@@ -3,9 +3,8 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 
 const app = express();
-const BACKEND_URL = "http://127.0.0.1:5001";
-
-const dashboardUser = {
+const BACKEND_URL = process.env.BACKEND_URL || "http://127.0.0.1:5001";
+const PORT = process.env.PORT || 3000;
   username: "ABC&D Block",
   latitude: "",
   longitude: "",
@@ -51,8 +50,7 @@ app.get("/dashboard", async (req, res) => {
 });
 
 // Start server
-const PORT = 3000;
-app.listen(PORT, () => console.log(`🚀 Node frontend on http://localhost:${PORT}`));
+app.listen(PORT, "0.0.0.0", () => console.log(`🚀 Node frontend on http://localhost:${PORT}`));
 
 // Profile update endpoint (edit lat, lon, avg_power)
 app.post("/profile/update", async (req, res) => {

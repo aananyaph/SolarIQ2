@@ -13,6 +13,6 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "BACKEND_URL": "https://solariq-backend.vercel.app"
   }
 }
