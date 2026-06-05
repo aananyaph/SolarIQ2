@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: solariq-frontend
+    env: node
+    dir: ./frontend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: BACKEND_URL
+        value: https://solariq-backend.vercel.app
+      - key: NODE_ENV
+        value: production
