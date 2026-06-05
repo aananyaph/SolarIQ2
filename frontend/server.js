@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
+const path = require("path");
 
 const app = express();
 const BACKEND_URL = process.env.BACKEND_URL || "http://127.0.0.1:5001";
@@ -15,7 +16,8 @@ const dashboardUser = {
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // accept JSON from frontend update requests
