@@ -1,0 +1,13 @@
+{
+  "name": "solariq",
+  "version": "1.0.0",
+  "description": "SolarIQ - Solar Energy Monitoring Dashboard",
+  "scripts": {
+    "start": "cd frontend && npm install && npm start",
+    "build": "cd frontend && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
