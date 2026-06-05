@@ -53,9 +53,9 @@ app.get("/dashboard", async (req, res) => {
   }
 });
 
-// Start server
+// Start server (updated for Render fix)
 if (require.main === module) {
-  app.listen(PORT, "0.0.0.0", () => console.log(`🚀 Node frontend on http://localhost:${PORT}`));
+  app.listen(PORT, "0.0.0.0", () => console.log(`🚀 Node frontend on http://0.0.0.0:${PORT}`));
 }
 
 module.exports = app;
