@@ -3,8 +3,7 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 
 const app = express();
-const BACKEND_URL = process.env.BACKEND_URL || "http://127.0.0.1:5001";
-const PORT = process.env.PORT || 3000;
+const BACKEND_URL = process.env.BACKEND_URL || "https://solariq-backend.vercel.app";
 
 const dashboardUser = {
   username: "ABC&D Block",
@@ -15,21 +14,16 @@ const dashboardUser = {
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(bodyParser.json());
 app.set("view engine", "ejs");
-
-// accept JSON from frontend update requests
-app.use(express.json());
+app.set("views", "../views");
 
 // Routes
-app.get("/", (req, res) => res.redirect("/dashboard"));
-
-// Dashboard
-app.get("/dashboard", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     const [todayRes, historyRes] = await Promise.all([
-      axios.get(`${BACKEND_URL}/today_status`, { timeout: 5000 }),
-      axios.get(`${BACKEND_URL}/history`, { timeout: 5000 }),
+      axios.get(`${BACKEND_URL}/today_status`),
+      axios.get(`${BACKEND_URL}/history`),
     ]);
 
     res.render("dashboard", {
@@ -47,23 +41,15 @@ app.get("/dashboard", async (req, res) => {
       todayData: null,
       historyData: [],
       forecastData: [],
+      error: "Unable to connect to backend",
     });
   }
 });
 
-// Start server
-if (require.main === module) {
-  app.listen(PORT, "0.0.0.0", () => console.log(`🚀 Node frontend on http://localhost:${PORT}`));
-}
-
-module.exports = app;
-
-// Profile update endpoint (edit lat, lon, avg_power)
 app.post("/profile/update", async (req, res) => {
   try {
     const { latitude, longitude, avg_power } = req.body;
 
-    // validate basic types
     const lat = latitude !== undefined ? Number(latitude) : undefined;
     const lon = longitude !== undefined ? Number(longitude) : undefined;
     const avg = avg_power !== undefined ? Number(avg_power) : undefined;
@@ -78,10 +64,11 @@ app.post("/profile/update", async (req, res) => {
     }
 
     Object.assign(dashboardUser, update);
-
     return res.json({ status: "success", user: dashboardUser });
   } catch (err) {
     console.error("Profile update error:", err);
     return res.status(500).json({ status: "error", message: "Server error" });
   }
 });
+
+module.exports = app;
